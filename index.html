@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a1d2e;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    .header, .footer {
+      background-color: #23263a;
+      padding: 10px;
+      text-align: center;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      background-color: #2e3140;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .nav a {
+      color: #ffffff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .nav a:hover {
+      background-color: #5567a6;
+      transform: scale(1.1);
+    }
+    .nav a.active {
+      background-color: #40568a;
+      transform: scale(1.1);
+    }
+    .content {
+      padding: 20px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .category {
+      background-color: #2e3140;
+      padding: 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .category:hover {
+      background-color: #5567a6;
+      transform: scale(1.1);
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-card {
+      background-color: #2e3140;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: background-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      background-color: #5567a6;
+      transform: scale(1.05);
+    }
+    .product-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .product-info {
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
+    .product-price {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    .product-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .product-detail img {
+      width: 70%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .product-detail .price {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    .product-detail .buy-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #5567a6;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s;
+    }
+    .product-detail .buy-button:hover {
+      background-color: #40568a;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .form input, .form textarea {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e3140;
+      color: #ffffff;
+      transition: background-color 0.3s;
+    }
+    .form input:focus, .form textarea:focus {
+      background-color: #35405d;
+      outline: none;
+    }
+    .form button {
+      background-color: #5567a6;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .form button:hover {
+      background-color: #40568a;
+    }
+    .search-bar input {
+      width: 80%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e3140;
+      color: #ffffff;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    .search-bar input:focus {
+      background-color: #35405d;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav">
+    <a href="#home" class="active" onclick="showPage('home')">Главная</a>
+    <a href="#categories" onclick="showPage('categories')">Категории</a>
+    <a href="#profile" onclick="showPage('profile')">Профиль</a>
+  </div>
+
+  <div class="content" id="content"></div>
+
+  <script>
+    let currentPage = 'home';
+
+    const categoriesData = {
+      home: [
+        { name: 'Для дома', link: 'home' },
+        { name: 'Техника', link: 'tech' },
+        { name: 'Одежда', link: 'clothes' }
+      ],
+      tech: [
+        { name: 'Телевизор', image: 'https://via.placeholder.com/150', price: getRandomPrice() },
+        { name: 'Холодильник', image: 'https://via.placeholder.com/150', price: getRandomPrice() }
+      ],
+      clothes: [
+        { name: 'Футболка', image: 'https://via.placeholder.com/150', price: getRandomPrice() },
+        { name: 'Джинсы', image: 'https://via.placeholder.com/150', price: getRandomPrice() }
+      ]
+    };
+
+    function getRandomPrice() {
+      return Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    }
+
+    function showPage(page) {
+      currentPage = page;
+      const content = document.getElementById('content');
+      switch (page) {
+        case 'home':
+          content.innerHTML = `
+            <h1>Добро пожаловать в маркетплейс!</h1>
+            <div class="categories">
+              ${categoriesData.home.map(category => `<div class="category" onclick="showCategory('${category.link}')">${category.name}</div>`).join('')}
+            </div>
+          `;
+          break;
+        case 'tech':
+        case 'clothes':
+          content.innerHTML = `
+            <h1>${page === 'tech' ? 'Техника' : 'Одежда'}</h1>
+            <div class="products">
+              ${categoriesData[page].map(product => `
+                <div class="product-card" onclick="showProductDetail('${page}', '${product.name}')">
+                  <img src="${product.image}" alt="${product.name}" class="product-image" />
+                  <div class="product-info">${product.name}</div>
+                  <div class="product-price">${product.price} грн</div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          break;
+        case 'profile':
+          content.innerHTML = `
+            <h1>Профиль</h1>
+            <p>ID: ${generateProfileId()}</p>
+          `;
+          break;
+      }
+    }
+
+    function showCategory(category) {
+      showPage(category);
+    }
+
+    function showProductDetail(category, productName) {
+      const product = categoriesData[category].find(p => p.name === productName);
+      document.getElementById('content').innerHTML = `
+        <div class="product-detail">
+          <img src="${product.image}" alt="${product.name}" />
+          <h2>${product.name}</h2>
+          <div class="price">${product.price} грн</div>
+          <button class="buy-button">Купить</button>
+        </div>
+      `;
+    }
+
+    function generateProfileId() {
+      return Math.random().toString(36).substring(2, 15);
+    }
+
+    // Show the home page by default
+    showPage('home');
+  </script>
+
+</body>
+</html>
